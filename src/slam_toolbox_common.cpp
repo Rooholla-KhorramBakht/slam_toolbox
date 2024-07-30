@@ -643,7 +643,7 @@ bool SlamToolbox::updateMap()
   vis_utils::toNavMap(occ_grid, map_.map);
 
   // publish map as current
-  map_.map.header.stamp = this->get_clock()->now() //scan_header.stamp;
+  map_.map.header.stamp = this->get_clock()->now(); //scan_header.stamp;
   sst_->publish(
     std::move(std::make_unique<nav_msgs::msg::OccupancyGrid>(map_.map)));
   sstm_->publish(
