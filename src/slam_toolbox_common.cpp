@@ -481,7 +481,8 @@ void SlamToolbox::publishTransformLoop(
     boost::this_thread::interruption_point();
     {
       boost::mutex::scoped_lock lock(map_to_odom_mutex_);
-      rclcpp::Time scan_timestamp = scan_header.stamp;
+      // rclcpp::Time scan_timestamp = scan_header.stamp;
+      rclcpp::Time scan_timestamp = this->get_clock()->now();
       // Avoid publishing tf with initial 0.0 scan timestamp
       if (scan_timestamp.seconds() > 0.0 && !scan_header.frame_id.empty()) {
         geometry_msgs::msg::TransformStamped msg;
@@ -642,7 +643,7 @@ bool SlamToolbox::updateMap()
   vis_utils::toNavMap(occ_grid, map_.map);
 
   // publish map as current
-  map_.map.header.stamp = scan_header.stamp;
+  map_.map.header.stamp = this->get_clock()->now() //scan_header.stamp;
   sst_->publish(
     std::move(std::make_unique<nav_msgs::msg::OccupancyGrid>(map_.map)));
   sstm_->publish(
